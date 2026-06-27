@@ -1501,60 +1501,6 @@ function TheoryModal(props) {
 // §9  MAIN APP
 // ════════════════════════════════════════════════════════════
 
-// Render text with * shown as superscript power
-function starify(text) {
-  if (!text || String(text).indexOf('*') === -1) return text;
-  var parts = String(text).split('*');
-  var children = [];
-  for (var i = 0; i < parts.length; i++) {
-    if (parts[i]) children.push(parts[i]);
-    if (i < parts.length - 1) {
-      children.push(React.createElement('span', {
-        key: 'sup' + i,
-        style: {
-          display: 'inline-block',
-          fontSize: '0.65em',
-          fontWeight: 800,
-          transform: 'translateY(-0.45em)',
-          lineHeight: 1,
-          letterSpacing: 0
-        }
-      }, '*'));
-    }
-  }
-  return React.createElement('span', null, children);
-}
-
-var SAMPLES = ['ab', 'a+b', 'a*', 'a(b+c)*', '(a+b)*c', '(a+ε)*b'];
-
-/* Build overlay nodes: regular chars visible, * rendered as superscript */
-function buildOverlayNodes(text) {
-  var parts = text.split('*');
-  var nodes = [];
-  for (var i = 0; i < parts.length; i++) {
-    if (parts[i]) nodes.push(React.createElement('span', { key: 'p' + i, className: "rxi-visible" }, parts[i]));
-    if (i < parts.length - 1) {
-      nodes.push(React.createElement('span', { key: 's' + i, 'data-star': '1' }, '*'));
-    }
-  }
-  return React.createElement('span', null, nodes);
-}
-
-/* Insert a string at the current cursor position in an input */
-function insertAtCursor(ref, char, setter) {
-  var el = ref.current;
-  if (!el) return;
-  var start = el.selectionStart;
-  var end = el.selectionEnd;
-  var val = el.value;
-  var newVal = val.slice(0, start) + char + val.slice(end);
-  setter(newVal);
-  setTimeout(function () {
-    el.focus();
-    el.setSelectionRange(start + char.length, start + char.length);
-  }, 0);
-}
-
 function App() {
   // ── state ──
   var rs = useState('a(b+c)*'); var regex = rs[0], setRegex = rs[1];
@@ -1935,66 +1881,42 @@ function App() {
           })
 
           /* SIMULATION BAR */
-          , React.createElement('div', { className: "simbar", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1586 } }
-            , React.createElement('span', { className: "simlbl", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1587 } }, isNfaTab ? 'NFA' : isMinTab ? 'Min-DFA' : 'DFA', " Test")
-            , React.createElement('input', {
-              className: "siminp", placeholder: "type a string to test...",
-              value: simIn,
-              onChange: function (e) { setSimIn(e.target.value); setSimRes(null); setSimTrace(null); setSimStep(-1); setSimPlaying(false); },
-              onKeyDown: function (e) { if (e.key === 'Enter') handleSim(); },
-              disabled: isNfaTab ? !finalNfa : isMinTab ? !minDfaData : !dfaData, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1588 }
+          , React.createElement(SimulationBar, {
+                isNfaTab,
+                isMinTab,
+
+                finalNfa,
+                dfaData,
+                minDfaData,
+
+                simIn,
+                setSimIn,
+
+                simRes,
+                setSimRes,
+
+                simTrace,
+                setSimTrace,
+
+                setSimStep,
+                setSimPlaying,
+
+                handleSim
             })
-            , React.createElement('button', { className: "simbtn", onClick: handleSim, disabled: isNfaTab ? !finalNfa : isMinTab ? !minDfaData : !dfaData, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1593 } }, "Simulate ▶")
-            , simRes === null && !simTrace && React.createElement('span', { className: "sr si", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1594 } }, "—")
-            , simRes === true && React.createElement('span', { className: "sr so", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1595 } }, "✓ ACCEPT")
-            , simRes === false && React.createElement('span', { className: "sr sx", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1596 } }, "✗ REJECT")
-          )
 
           /* ANIMATED SIM STEP CONTROLS */
-          , simTrace && simTrace.steps.length > 0 && (
-            React.createElement('div', { className: "simstep", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1601 } }
-              , React.createElement('span', { className: "simstep-label", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1602 } }, "Step")
-              , React.createElement('button', {
-                className: "simnb", disabled: simStep <= 0,
-                onClick: function () { setSimPlaying(false); setSimStep(function (s) { return s - 1; }); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1603 }
-              }, "← Prev")
-              , React.createElement('span', { className: "simstep-counter", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1605 } }
-                , React.createElement('em', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1606 } }, simStep + 1), " / ", simTrace.steps.length
-                , simTrace.steps[simStep] && simTrace.steps[simStep].input !== null && (
-                  React.createElement('span', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1608 } }, " — reading ", React.createElement('span', { className: "simstep-char", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1608 } }, "\"", simTrace.steps[simStep].input, "\""))
-                )
-                , simTrace.steps[simStep] && simTrace.steps[simStep].input === null && (
-                  React.createElement('span', { className: "simstep-char", style: { marginLeft: '.4rem', background: 'rgba(91,140,255,.1)', color: 'var(--muted)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1611 } }, "init")
-                )
-              )
-              , React.createElement('button', {
-                className: "simnb", disabled: simStep >= simTrace.steps.length - 1,
-                onClick: function () { setSimPlaying(false); setSimStep(function (s) { return s + 1; }); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1614 }
-              }, "Next →")
-              /* Final step verdict badge */
-              , isLastSimStep && (
-                React.createElement('span', {
-                  className: "sr", style: {
-                    background: simRes ? 'rgba(67,233,123,.15)' : 'rgba(255,107,107,.15)',
-                    color: simRes ? '#43e97b' : '#ff6b6b',
-                    border: '1px solid ' + (simRes ? '#43e97b' : '#ff6b6b'),
-                    fontWeight: 800, animation: simRes ? 'pulseAccept .9s ease-in-out infinite' : 'pulseReject .7s ease-in-out infinite'
-                  }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1618 }
-                }
-                  , simRes ? '● ACCEPT' : '● REJECT'
-                )
-              )
-              , React.createElement('div', { className: "simstep-desc", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1627 } }
-                , simTrace.steps[simStep] && simTrace.steps[simStep].desc
-                , isNfaTab && simTrace.steps[simStep] && simTrace.steps[simStep].stateIds && simTrace.steps[simStep].stateIds.length > 0 && (
-                  React.createElement('span', { className: "simstep-states", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1630 } }, " → active: ", '{q' + simTrace.steps[simStep].stateIds.join(',q') + '}')
-                )
-                , !isNfaTab && simTrace.steps[simStep] && simTrace.steps[simStep].state && (
-                  React.createElement('span', { className: "simstep-states", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1633 } }, " → in state: ", simTrace.steps[simStep].state)
-                )
-              )
-            )
-          )
+          , simTrace &&
+            simTrace.steps.length > 0 &&
+            React.createElement(SimulationControls,{
+                simTrace,
+                simStep,
+                setSimStep,
+                setSimPlaying,
+
+                simRes,
+                isLastSimStep,
+                isNfaTab
+            })
         )
       )
 
