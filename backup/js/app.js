@@ -1771,241 +1771,86 @@ function App() {
             setShowTh: setShowTh
         }),
 
-        
-    
-
-
       /* NFA / DFA / MIN TAB BAR */
-      React.createElement('div', { className: "tabbar", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1326 } }
-        , React.createElement('button', { className: 'tabbtn' + (isNfaTab ? ' on' : ''), onClick: function () { setViewTab('nfa'); setSimTrace(null); setSimStep(-1); setSimRes(null); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1327 } }
-          , React.createElement('span', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1328 } }, "◎"), " ε-NFA"
-          , nfaSteps.length > 0 && React.createElement('span', { className: "bd bm", style: { marginLeft: '.3rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1329 } }, nfaSteps.length, " steps")
-        )
-        , React.createElement('button', { className: 'tabbtn' + (isDfaTab ? ' dfa-on' : ''), onClick: function () { setViewTab('dfa'); setSimTrace(null); setSimStep(-1); setSimRes(null); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1331 } }
-          , React.createElement('span', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1332 } }, "⬡"), " DFA"
-          , dfaData && React.createElement('span', { className: "bd bp2", style: { marginLeft: '.3rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1333 } }, dfaData.dfaSnap.states.length, " states")
-        )
-        , React.createElement('button', { className: 'tabbtn' + (isMinTab ? ' min-on' : ''), onClick: function () { setViewTab('min'); setSimTrace(null); setSimStep(-1); setSimRes(null); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1335 } }
-          , React.createElement('span', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1336 } }, "◈"), " Min-DFA"
-          , minDfaData && React.createElement('span', { className: "bd be", style: { marginLeft: '.3rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1337 } }, minDfaData.minCount, " states")
-        )
-      )
+      React.createElement(TabBar, {
+          isNfaTab: isNfaTab,
+          isDfaTab: isDfaTab,
+          isMinTab: isMinTab,
+
+          nfaSteps: nfaSteps,
+          dfaData: dfaData,
+          minDfaData: minDfaData,
+
+          setViewTab: setViewTab,
+          setSimTrace: setSimTrace,
+          setSimStep: setSimStep,
+          setSimRes: setSimRes
+      }),
 
       /* MAIN LAYOUT */
-      , React.createElement('div', { className: "lay", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1342 } }
+      React.createElement('div', { className: "lay", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1342 } }
 
         /* ── LEFT PANEL ── */
         , React.createElement('div', { className: "left", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1345 } }
-          , React.createElement('div', { className: "tbar", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1346 } }
-            , React.createElement('div', { className: "slbl", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1347 } }, "Regular Expression")
-            , React.createElement('div', { className: "rxi-wrap" },
-              /* Overlay that renders * as superscript */
-              React.createElement('div', { className: "rxi-overlay", 'aria-hidden': "true" },
-                regex.length === 0
-                  ? React.createElement('span', { className: "rxi-placeholder" }, "e.g. a(b|c)*  — use \\* for literal *")
-                  : buildOverlayNodes(regex)
-              ),
-              React.createElement('input', {
-                className: "rxi",
-                value: regex,
-                ref: rxiRef,
-                onChange: function (e) { setRegex(e.target.value); },
-                onKeyDown: function (e) {
-                  if (e.key === 'Enter') { handleBuild(); return; }
-                  /* Intercept * → insert * (already correct for parser, overlay shows as superscript) */
-                },
-                placeholder: "e.g. a(b|c)*  — use \\* for literal *",
-                spellCheck: false
-              })
-            )
-            , React.createElement('div', { className: "rxi-foot" },
-              React.createElement('button', {
-                className: "eps-btn",
-                title: "Insert epsilon (ε)",
-                onClick: function () { insertAtCursor(rxiRef, 'ε', setRegex); }
-              }, "ε"),
-              React.createElement('span', { className: "eps-hint" }, "click or press Alt+E to insert ε")
-            )
-            , err && React.createElement('div', { className: "emsg", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1352 } }, err)
-            , React.createElement('div', { className: "brow", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1353 } }
-              , React.createElement('button', { className: "btn bp", onClick: handleBuild, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1354 } }, "⚡ Build NFA")
-              , React.createElement('button', {
-                className: "btn bdfa", onClick: handleDFA,
-                disabled: !finalNfa, style: { opacity: finalNfa ? 1 : .5 }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1355 }
-              }, "⬡ → DFA")
-              , React.createElement('button', {
-                className: "btn", onClick: handleMinimize,
-                disabled: !dfaData,
-                style: { background: 'var(--a4)', color: '#fff', opacity: dfaData ? 1 : .5, flex: 1 }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1357 }
-              }, "◈ Min")
-              , React.createElement('button', {
-                className: "btn bs", onClick: handleClear,
-                style: { flex: '0 0 auto', padding: '.48rem .55rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1360 }
-              }, "✕")
-            )
-            , React.createElement('div', { style: { marginTop: '.55rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1363 } }
-              , React.createElement('div', { className: "slbl", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1364 } }, "Examples")
-              , React.createElement('div', { className: "chips", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1365 } }
-                , SAMPLES.map(function (s) {
-                  return (
-                    React.createElement('button', { key: s, className: "chip", onClick: function () { setRegex(s); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1367 } }, starify(s))
-                  );
-                })
-              )
-            )
-          )
+          , React.createElement(RegexPanel,{
+                regex,
+                setRegex,
+                rxiRef,
+                err,
+
+                handleBuild,
+                handleDFA,
+                handleMinimize,
+                handleClear,
+
+                finalNfa,
+                dfaData,
+
+                buildOverlayNodes,
+                insertAtCursor,
+
+                SAMPLES,
+                starify
+            })
 
           /* ── STEP LIST ── */
           , React.createElement('div', { className: "slist", ref: slistRef, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1374 } }
 
             /* NFA steps */
-            , isNfaTab && (
-              React.createElement('div', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1378 } }
-                , nfaSteps.length === 0 && (
-                  React.createElement('div', { className: "ehint", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1380 } }, "Enter a regex and press", React.createElement('br', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1380 } }), React.createElement('strong', { style: { color: 'var(--accent)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1380 } }, "Build NFA"), React.createElement('br', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1380 } }), "to see Thompson's Construction step-by-step.")
-                )
-                , nfaSteps.map(function (step, i) {
-                  var act = nfaIdx === i;
-                  return (
-                    React.createElement('div', { key: i, ref: act ? activeCardRef : null, className: 'scard' + (act ? ' act' : ''), onClick: function () { setIsPlaying(false); setNfaIdx(i); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1385 } }
-                      , React.createElement('div', { className: "shd", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1386 } }
-                        , React.createElement('div', { className: "sn", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1387 } }, i + 1)
-                        , React.createElement('div', { className: "srl", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1388 } }, starify(step.rule))
-                      )
-                      , act && (React.createElement('div', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1390 } }
-                        , React.createElement('div', { className: "swy", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1391 } }, starify(step.why))
-                        , React.createElement('div', { className: "srs", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1392 } }, React.createElement('span', { className: "bd bg", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1392 } }, "→"), " ", starify(step.res))
-                      ))
-                    )
-                  );
-                })
-                , nfaSteps.length > 0 && (
-                  React.createElement('div', {
-                    ref: nfaIdx === nfaSteps.length ? activeCardRef : null, className: 'scard fin' + (nfaIdx === nfaSteps.length ? ' act' : ''),
-                    onClick: function () { setIsPlaying(false); setNfaIdx(nfaSteps.length); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1398 }
-                  }
-                    , React.createElement('div', { className: "shd", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1400 } }
-                      , React.createElement('div', { className: "sn", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1401 } }, "✓")
-                      , React.createElement('div', { className: "srl", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1402 } }, "Final ε-NFA")
-                    )
-                    , nfaIdx === nfaSteps.length && finalNfa && (
-                      React.createElement('div', { className: "swy", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1405 } }, "Complete ε-NFA for "
-                        , React.createElement('strong', { style: { color: 'var(--text)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1406 } }, regex), ".", ' ', "Start: "
-                        , React.createElement('span', { className: "bd bm", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1407 } }, "q", finalNfa.startId), ' ', "Accept: "
-                        , React.createElement('span', { className: "bd bg", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1408 } }, "q", finalNfa.acceptId), ".", React.createElement('br', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1408 } }), "Now press "
-                        , React.createElement('strong', { style: { color: 'var(--a5)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1409 } }, "⬡ → DFA"), " to convert."
-                      )
-                    )
-                  )
-                )
-              )
-            )
+            , isNfaTab &&
+              React.createElement(NFAStepList,{
+                  nfaSteps,
+                  nfaIdx,
+                  setNfaIdx,
+                  setIsPlaying,
+                  activeCardRef,
+                  finalNfa,
+                  regex,
+                  starify
+              })
 
             /* DFA steps */
-            , isDfaTab && (
-              React.createElement('div', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1419 } }
-                , (!dfaData) && (
-                  React.createElement('div', { className: "ehint", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1421 } }, "Build the NFA first, then press", React.createElement('br', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1421 } }), React.createElement('strong', { style: { color: 'var(--a5)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1421 } }, "⬡ → DFA"), React.createElement('br', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1421 } }), "to run Subset Construction step-by-step.")
-                )
-                , dfaData && dfaData.steps.map(function (step, i) {
-                  var act = dfaIdx === i;
-                  var isFin = step.type === 'final';
-                  return (
-                    React.createElement('div', {
-                      key: i, ref: act ? activeCardRef : null, className: 'scard dfa-act' + (act ? ' act' : '') + (isFin ? ' dfa-fin' : ''),
-                      style: { opacity: act ? 1 : .48 },
-                      onClick: function () { setIsPlaying(false); setDfaIdx(i); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1427 }
-                    }
-                      , React.createElement('div', { className: "shd", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1430 } }
-                        , React.createElement('div', { className: "sn", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1431 } }, isFin ? '✓' : (i + 1))
-                        , React.createElement('div', { className: "srl", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1432 } }
-                          , step.type === 'start' && 'Start State: DFA ' + step.dfaLabel
-                          , step.type === 'transition' && 'δ(' + step.dfaLabel + ', "' + step.symbol + '") = ' + step.targetLabel
-                          , step.type === 'final' && 'DFA Complete'
-                        )
-                      )
-                      , act && (
-                        React.createElement('div', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1439 } }
-                          , React.createElement('div', { className: "swy", style: { whiteSpace: 'pre-line' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1440 } }, step.why)
-                          , step.isNew && step.type === 'transition' && (
-                            React.createElement('div', { className: "srs", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1442 } }
-                              , React.createElement('span', { className: "bd bp2", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1443 } }, "NEW"), " DFA state ", step.targetLabel, " = NFA", ' '
-                              , '{q' + (step.targetNfaIds || []).join(',q') + '}'
-                              , step.isAccept && React.createElement('span', { className: "bd bg", style: { marginLeft: '.3rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1445 } }, "ACCEPT")
-                            )
-                          )
-                          , React.createElement(DFATable, {
-                            rows: step.tableRows, alpha: dfaData.alphabet,
-                            hiLabel: step.type === 'transition' ? step.dfaLabel : step.dfaLabel, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1448 }
-                          })
-                        )
-                      )
-                    )
-                  );
-                })
-              )
-            )
+            , isDfaTab &&
+              React.createElement(DFAStepList, {
+                  dfaData,
+                  dfaIdx,
+                  setDfaIdx,
+                  setIsPlaying,
+                  activeCardRef,
+                  DFATable
+              })
 
             /* Min-DFA steps */
-            , isMinTab && (
-              React.createElement('div', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1460 } }
-                , (!minDfaData) && (
-                  React.createElement('div', { className: "ehint", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1462 } }, "Build the DFA first, then press", React.createElement('br', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1462 } }), React.createElement('strong', { style: { color: 'var(--a4)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1462 } }, "◈ Min"), React.createElement('br', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1462 } }), "to run Hopcroft's minimization step-by-step.")
-                )
-                , minDfaData && (
-                  React.createElement('div', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1465 } }
-                    , React.createElement('div', { className: "scard act", style: { opacity: 1, borderColor: 'var(--a4)', marginBottom: '.5rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1466 } }
-                      , React.createElement('div', { className: "shd", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1467 } }
-                        , React.createElement('div', { className: "sn", style: { background: 'var(--a4)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1468 } }, "★")
-                        , React.createElement('div', { className: "srl", style: { color: 'var(--a4)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1469 } }, "Hopcroft Minimization Result")
-                      )
-                      , React.createElement('div', { className: "swy", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1471 } }, "DFA: "
-                        , React.createElement('span', { className: "bd be", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1472 } }, minDfaData.origCount, " states"), " → Min-DFA: ", React.createElement('span', { className: "bd bg", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1472 } }, minDfaData.minCount, " states")
-                        , minDfaData.origCount === minDfaData.minCount && React.createElement('span', { className: "bd be", style: { marginLeft: '.4rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1473 } }, "already minimal")
-                        , minDfaData.origCount > minDfaData.minCount && React.createElement('span', { className: "bd bg", style: { marginLeft: '.4rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1474 } }, "reduced by ", minDfaData.origCount - minDfaData.minCount)
-                      )
-                      , React.createElement(MinDFATable, { minSnap: minDfaData.minSnap, alpha: dfaData.alphabet, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1476 } })
-                    )
-                    , minDfaData.steps.map(function (step, i) {
-                      var act = minDfaIdx === i;
-                      var isFin = i === minDfaData.steps.length - 1;
-                      return (
-                        React.createElement('div', {
-                          key: i, ref: act ? activeCardRef : null, className: 'scard' + (act ? ' act' : ''),
-                          style: { opacity: act ? 1 : .48, borderColor: act ? (isFin ? 'var(--a3)' : 'var(--a4)') : 'var(--border)' },
-                          onClick: function () { setIsPlaying(false); setMinDfaIdx(i); }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1482 }
-                        }
-                          , React.createElement('div', { className: "shd", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1485 } }
-                            , React.createElement('div', { className: "sn", style: { background: isFin ? 'var(--a3)' : 'var(--a4)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1486 } }, isFin ? '✓' : (i + 1))
-                            , React.createElement('div', { className: "srl", style: { color: isFin ? 'var(--a3)' : 'var(--a4)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1487 } }
-                              , isFin ? 'Minimization Complete' : ('Partition step ' + (i + 1))
-                            )
-                          )
-                          , act && (
-                            React.createElement('div', { __self: this, __source: { fileName: _jsxFileName, lineNumber: 1492 } }
-                              , React.createElement('div', { className: "swy", style: { whiteSpace: 'pre-wrap', wordBreak: 'break-word' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1493 } }, step.desc)
-                              , step.partition && (
-                                React.createElement('div', { style: { marginTop: '.4rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1495 } }
-                                  , React.createElement('div', { className: "slbl", style: { marginBottom: '.3rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1496 } }, "Current partition:")
-                                  , React.createElement('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '.28rem', marginBottom: '.4rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1497 } }
-                                    , step.partition.map(function (group, gi) {
-                                      return (
-                                        React.createElement('span', { key: gi, className: "bd be", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1500 } }, '{' + group.join(',') + '}')
-                                      );
-                                    })
-                                  )
-                                )
-                              )
-                              , isFin && React.createElement(MinDFATable, { minSnap: minDfaData.minSnap, alpha: dfaData.alphabet, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1506 } })
-                            )
-                          )
-                        )
-                      );
-                    })
-                  )
-                )
-              )
-            )
+            , isMinTab &&
+              React.createElement(MinDFAStepList, {
+                  minDfaData,
+                  minDfaIdx,
+                  setMinDfaIdx,
+                  setIsPlaying,
+                  activeCardRef,
+                  dfaData,
+                  MinDFATable
+              })
           )
 
           /* ── NAV ── */
@@ -2073,43 +1918,21 @@ function App() {
 
         /* ── RIGHT PANEL ── */
         , React.createElement('div', { className: "right", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1549 } }
-          , React.createElement('div', { className: "viz", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1550 } }
-            , isNfaTab && React.createElement(NFAViz, { snap: nfaDisplay, activeIds: simActiveNfaIds, simResult: simFinalResult, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1551 } })
-            , isDfaTab && React.createElement(DFAViz, { dfaSnap: dfaDisplay, activeLabel: simActiveDfaLabel, simResult: simFinalResult, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1552 } })
-            , isMinTab && React.createElement(MinDFAViz, { dfaSnap: minDisplay, activeLabel: simActiveMinLabel, simResult: simFinalResult, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1553 } })
+          , React.createElement(VisualizationPanel, {
+              isNfaTab,
+              isDfaTab,
+              isMinTab,
 
-            /* NFA legend */
-            , isNfaTab && nfaDisplay && (
-              React.createElement('div', { className: "leg", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1557 } }
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1558 } }, React.createElement('div', { className: "ld", style: { borderColor: '#9b59b6', background: '#1a1030' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1558 } }), " Start")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1559 } }, React.createElement('div', { className: "ld", style: { borderColor: '#43e97b', background: '#0d2318' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1559 } }), " Accept")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1560 } }, React.createElement('div', { className: "ld", style: { borderColor: '#5b8cff', background: '#1e2740' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1560 } }), " State")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1561 } }, React.createElement('span', { style: { color: '#f7971e', fontSize: '.82rem' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1561 } }, "ε"), " epsilon")
-                , React.createElement('div', { className: "li", style: { fontSize: '.6rem', color: 'var(--muted)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1562 } }, "Dimmed = prior steps")
-              )
-            )
-            /* DFA legend */
-            , isDfaTab && dfaDisplay && dfaDisplay.states && dfaDisplay.states.length > 0 && (
-              React.createElement('div', { className: "leg", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1566 } }
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1567 } }, React.createElement('div', { className: "ld", style: { borderColor: '#c77dff', background: '#1c1535' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1567 } }), " Start")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1568 } }, React.createElement('div', { className: "ld", style: { borderColor: '#43e97b', background: '#0d2318' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1568 } }), " Accept")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1569 } }, React.createElement('div', { className: "ld", style: { borderColor: '#c77dff', background: '#1c1535' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1569 } }), " DFA state")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1570 } }, React.createElement('div', { className: "ld", style: { borderColor: '#ff6b6b', background: '#1a0808', borderStyle: 'dashed' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1570 } }), " Dead (∅)")
-                , React.createElement('div', { className: "li", style: { fontSize: '.6rem', color: 'var(--muted)' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1571 } }, "Labels show NFA set")
-              )
-            )
-            /* Min-DFA legend */
-            , isMinTab && minDisplay && minDisplay.states && minDisplay.states.length > 0 && (
-              React.createElement('div', { className: "leg", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1575 } }
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1576 } }, React.createElement('div', { className: "ld", style: { borderColor: '#f7971e', background: '#1c1a10' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1576 } }), " Start")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1577 } }, React.createElement('div', { className: "ld", style: { borderColor: '#43e97b', background: '#0d2318' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1577 } }), " Accept")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1578 } }, React.createElement('div', { className: "ld", style: { borderColor: '#f7971e', background: '#1c1a10' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1578 } }), " Min state")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1578 } }, React.createElement('div', { className: "ld", style: { borderColor: '#ff6b6b', background: '#1a0808', borderStyle: 'dashed' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1578 } }), " Dead (∅)")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1579 } }, React.createElement('div', { className: "ld", style: { borderColor: '#ff6b6b', background: '#2a0a0a' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1579 } }), " Reject (sim)")
-                , React.createElement('div', { className: "li", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1580 } }, React.createElement('div', { className: "ld", style: { borderColor: '#43e97b', background: '#0a2218' }, __self: this, __source: { fileName: _jsxFileName, lineNumber: 1580 } }), " Accept (sim)")
-              )
-            )
-          )
+              nfaDisplay,
+              dfaDisplay,
+              minDisplay,
+
+              simActiveNfaIds,
+              simActiveDfaLabel,
+              simActiveMinLabel,
+
+              simFinalResult
+          })
 
           /* SIMULATION BAR */
           , React.createElement('div', { className: "simbar", __self: this, __source: { fileName: _jsxFileName, lineNumber: 1586 } }
